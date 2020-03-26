@@ -16,7 +16,6 @@ for (var i = 0; i < remove.length; i++) {
 }
 
 
-
 //gets nonempty website name to add to blacklist
 function addElement() {
   var inputValue = document.getElementById("userInput").value;
@@ -40,6 +39,7 @@ function addToBlacklist(str) {
     }
     if (check === 0) {
       bl.push(str);
+      bl.sort();
       chrome.storage.sync.set({blacklist: bl}, function(){
       })
       newElement(str);
@@ -98,8 +98,13 @@ function removeItem(div) {
 
 //displays the blacklist onto popup.html
 function writeList(){
+  chrome.storage.sync.get({userID}, function(temp) {
+    var id = temp.userID;
+    var pl = document.getElementById("userID").placeholder = id;
+
+  })
   chrome.storage.sync.get({blacklist: []}, function(temp) {
-    var bl = temp.blacklist;
+    var bl = temp.blacklist.sort();
     for (var i = 0; i < bl.length; i++) {
       newElement(bl[i]);
     }
